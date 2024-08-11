@@ -13,19 +13,18 @@ const FlashcardSet = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const fetchFlashcards = async () => {
+      try {
+        const response = await axios.get(`${ipAddress}/api/flashcard`);
+        setFlashcards(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load flashcards. Please try again later.");
+        setLoading(false);
+      }
+    };
     fetchFlashcards();
   }, []);
-
-  const fetchFlashcards = async () => {
-    try {
-      const response = await axios.get(`${ipAddress}/api/flashcard`);
-      setFlashcards(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError("Failed to load flashcards. Please try again later.");
-      setLoading(false);
-    }
-  };
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);

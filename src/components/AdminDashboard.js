@@ -28,20 +28,19 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({ total: 0, avgLength: 0, usefulStat: 0 });
 
   useEffect(() => {
+    const fetchFlashcards = async () => {
+      try {
+        const response = await axios.get(`${ipAddress}/api/flashcard`);
+        setFlashcards(response.data);
+        setStats(calculateStats(response.data));
+        setLoading(false);
+      } catch (error) {
+        setError("Failed to load flashcards");
+        setLoading(false);
+      }
+    };
     fetchFlashcards();
   }, []);
-
-  const fetchFlashcards = async () => {
-    try {
-      const response = await axios.get(`${ipAddress}/api/flashcard`);
-      setFlashcards(response.data);
-      setStats(calculateStats(response.data));
-      setLoading(false);
-    } catch (error) {
-      setError("Failed to load flashcards");
-      setLoading(false);
-    }
-  };
 
   const calculateStats = (flashcards) => {
     const total = flashcards.length;
